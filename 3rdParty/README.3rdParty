@@ -1,0 +1,28 @@
+triangle
+========
+Triangle generates exact Delaunay triangulations, constrained Delaunay
+triangulations, conforming Delaunay triangulations, Voronoi diagrams, and
+high-quality triangular meshes. The latter can be generated with no small
+or large angles, and are thus suitable for finite element analysis.
+
+URL: http://www.cs.cmu.edu/~quake/triangle.html
+Download: http://www.netlib.org/voronoi/triangle.zip
+
+medit
+=====
+OpenGL-based scientific visualization software. Developped to visualize
+numerical simulation results on unstructured meshes in two and three
+dimensions. Scalar, vector and tensor fields can be easily associated and
+displayed with meshes.
+
+URL: https://www.ljll.math.upmc.fr/frey/software.html
+Download: https://www.ljll.math.upmc.fr/frey/ftp/archives/medit.2012.02.05.tgz
+
+XPTools
+=======
+The X-Plane command-line tools ("xptools") are a collection of tools for
+editing scenery.
+
+URL: https://developer.x-plane.com/tools/xptools/
+Download: http://dev.x-plane.com/download/tools/xptools_lin_15-3.zip
+
