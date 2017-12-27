@@ -1,0 +1,18 @@
+Source: ortho4xp
+Section: misc
+Priority: optional
+Maintainer: Cédric Dufour <cedric.dufour@ced-network.net>
+Build-Depends: build-essential, debhelper (>= 9)
+Homepage: https://github.com/oscarpilote/Ortho4XP
+
+Package: ortho4xp
+Architecture: all
+Depends: p7zip-full, imagemagick, libjpeg62-turbo, libnvtt-bin, libtiff5, python3-gdal, python3-numpy, python3-overpy, python3-pil.imagetk, python3-pyproj, python3-requests, python3-tk, webp
+Recommends: ortho4xp-data
+Suggests: gimp
+Description: Scenery generator for the X-Plane flight simulator
+
+Package: ortho4xp-data
+Architecture: all
+Description: Scenery generator for the X-Plane flight simulator - Sample data
+

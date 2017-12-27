@@ -1,0 +1,129 @@
+diff --git a/Ortho4XP_devel.py b/Ortho4XP_devel.py
+index 727a6b9..cbe020e 100644
+--- a/Ortho4XP_devel.py
++++ b/Ortho4XP_devel.py
+@@ -33,16 +33,10 @@ try:
+ except:
+     pass
+ 
+-if getattr(sys,'frozen',False):
+-    Ortho4XP_dir        = '..'
+-    os.environ["REQUESTS_CA_BUNDLE"] = os.path.join(os.getcwd(), "cacert.pem") # needed to access https providers with the bin version
+-else:
+-    Ortho4XP_dir        = '.'
+-
+-try:
+-    sys.path.append(os.getcwd()+'/'+Ortho4XP_dir+'/bin/Modules')
+-except:
+-    pass
++#> DEBIAN
++Ortho4XP_src        = '/usr/lib/python3/dist-packages/Ortho4XP'
++Ortho4XP_dir        = '.'
++#< DEBIAN
+ 
+ import requests
+ import pyproj
+@@ -171,7 +165,7 @@ explanation={}
+ for item in configvars:
+     explanation[item]='TODO!'    
+ try:
+-    exec(open(Ortho4XP_dir+dir_sep+'Help.py').read(),globals())
++    exec(open(Ortho4XP_src+dir_sep+'Help.py').read(),globals())
+ except:
+     pass    
+     
+@@ -237,7 +231,8 @@ elif 'win' in sys.platform:
+     shutdown_cmd    = 'shutdown /s /f /t 0'
+ else:
+     dir_sep         = '/'
+-    Triangle4XP_cmd = Ortho4XP_dir+"/Utils/Triangle4XP "
++    Triangle4XP_cmd = Ortho4XP_src+"/Utils/Triangle4XP "
++    dsftool_cmd     = Ortho4XP_src+"/Utils/DSFTool "
+     delete_cmd      = "rm "
+     copy_cmd        = "cp "
+     rename_cmd      = "mv "
+@@ -247,8 +242,8 @@ else:
+     gimp_cmd        = "gimp "
+     devnull_rdir    = " >/dev/null 2>&1 "
+     shutdown_cmd    = 'sudo shutdown -h now'
+-    os.system('chmod a+x '+Ortho4XP_dir+dir_sep+'Utils/DSFTool')
+-    os.system('chmod a+x '+Ortho4XP_dir+dir_sep+'Utils/Triangle4XP')
++    #os.system('chmod a+x '+Ortho4XP_src+dir_sep+'Utils/DSFTool')
++    #os.system('chmod a+x '+Ortho4XP_src+dir_sep+'Utils/Triangle4XP')
+ 
+ #
+ #   END OF FACTORY DEFAULT VALUES
+@@ -270,13 +265,13 @@ fake_headers_generic={\
+             }
+ 
+ #try:
+-#    exec(open(Ortho4XP_dir+dir_sep+'Carnet_d_adresses.py').read())
++#    exec(open(Ortho4XP_src+dir_sep+'Carnet_d_adresses.py').read())
+ #except:
+ #    print("The file Carnet_d_adresses.py does not follow the syntactic rules.")
+ #    time.sleep(5)
+ #    sys.exit()
+ #try:
+-#    exec(open(Ortho4XP_dir+dir_sep+'APL_scripts.py').read())
++#    exec(open(Ortho4XP_src+dir_sep+'APL_scripts.py').read())
+ #except:
+ #    pass
+ 
+@@ -3064,7 +3059,7 @@ def initialize_providers_dict():
+             f.close()
+ 
+ def initialize_combined_providers_dict():   
+-    for file_name in os.listdir("active_providers"):
++    for file_name in os.listdir(os.path.join(Ortho4XP_dir,"active_providers")):
+         if '.' not in file_name or file_name.split('.')[-1]!='comb': continue
+         provider_code=file_name.split('.')[0]
+         try:
+@@ -3832,7 +3827,7 @@ def create_tile_preview(latmin,lonmin,zoomlevel,provider_code):
+         #            small_image=Image.open(io.BytesIO(r.content))
+         #            big_image.paste(small_image,((til_x-til_x_min)*256,(til_y-til_y_min)*256))
+         #        else:
+-        #            small_image=Image.open(Ortho4XP_dir+dir_sep+'Utils'+dir_sep+\
++        #            small_image=Image.open(Ortho4XP_src+dir_sep+'Utils'+dir_sep+\
+         #              'white.jpg')
+         #            big_image.paste(small_image,((til_x-til_x_min)*256,(til_y-til_y_min)*256))
+             #try:
+@@ -3862,7 +3857,7 @@ def create_vignette(tilx0,tily0,tilx1,tily1,zoomlevel,provider_code,vignette_nam
+                     small_image=Image.open(io.BytesIO(r.content))
+                     big_image.paste(small_image,((til_x-tilx0)*256,(til_y-tily0)*256))
+                 else:
+-                    small_image=Image.open(Ortho4XP_dir+dir_sep+'Utils'+dir_sep+\
++                    small_image=Image.open(Ortho4XP_src+dir_sep+'Utils'+dir_sep+\
+                       'white.jpg')
+                     big_image.paste(small_image,((til_x-tilx0)*256,(til_y-tily0)*256))
+         big_image.save(vignette_name)
+@@ -4828,7 +4823,7 @@ def build_dsf(lat0,lon0,ortho_list,water_overlay,\
+                     #textures[0][pool_idx]+=tri_p
+     f_mesh.close()
+     download_to_do_list.append('finished')
+-    os.system(copy_cmd+' "'+Ortho4XP_dir+dir_sep+'Utils'+dir_sep+\
++    os.system(copy_cmd+' "'+Ortho4XP_src+dir_sep+'Utils'+dir_sep+\
+              'water_transition.png'+'" "'+build_dir+dir_sep+'textures'+\
+               dir_sep+'" '+devnull_rdir) 
+     print("  Encoding of the DSF file...")  
+@@ -5259,12 +5254,6 @@ def build_overlay(lat,lon,file_to_sniff):
+               devnull_rdir)
+         os.system(unzip_cmd+' e -o'+Ortho4XP_dir+dir_sep+'tmp'+' "'+\
+               file_to_sniff_loc+'.7z"')
+-    if 'dar' in sys.platform:
+-        dsftool_cmd=Ortho4XP_dir+dir_sep+"Utils"+dir_sep+"DSFTool.app "
+-    elif 'win' in sys.platform:
+-        dsftool_cmd=Ortho4XP_dir+dir_sep+"Utils"+dir_sep+"DSFTool.exe "
+-    else:
+-        dsftool_cmd=Ortho4XP_dir+dir_sep+"Utils"+dir_sep+"DSFTool "
+     print("-> Converting the copy to text format")
+     dsfconvertcmd=[dsftool_cmd.strip(),' -dsf2text '.strip(),file_to_sniff_loc,Ortho4XP_dir+dir_sep+'tmp'+dir_sep+'tmp_dsf.txt']
+     fingers_crossed=subprocess.Popen(dsfconvertcmd,stdout=subprocess.PIPE,bufsize=0)
+@@ -9128,6 +9117,8 @@ if __name__ == '__main__':
+             os.makedirs(Ortho4XP_dir+dir_sep+'OSM_data')
+         if not os.path.exists(Ortho4XP_dir+dir_sep+'Tiles'):
+             os.makedirs(Ortho4XP_dir+dir_sep+'Tiles')
++        if not os.path.exists(Ortho4XP_dir+dir_sep+'tmp'):
++            os.makedirs(Ortho4XP_dir+dir_sep+'tmp')
+         os.system(delete_cmd+" "+Ortho4XP_dir+dir_sep+"tmp"+dir_sep+"*.jpg "+devnull_rdir)
+         os.system(delete_cmd+" "+Ortho4XP_dir+dir_sep+"tmp"+dir_sep+"*.png "+devnull_rdir)
+         application = Ortho4XP_Graphical()

@@ -1,0 +1,11 @@
+debian/build/Ortho4XP.py /usr/lib/python3/dist-packages/Ortho4XP
+Carnet_d_adresses.py /usr/lib/python3/dist-packages/Ortho4XP
+analyze_imagery.py /usr/lib/python3/dist-packages/Ortho4XP
+mask_region.py /usr/lib/python3/dist-packages/Ortho4XP
+merge_dtms.py /usr/lib/python3/dist-packages/Ortho4XP
+reduce_imagery.py /usr/lib/python3/dist-packages/Ortho4XP
+debian/build/Triangle4XP /usr/lib/python3/dist-packages/Ortho4XP/Utils
+debian/build/DSFTool /usr/lib/python3/dist-packages/Ortho4XP/Utils
+Utils/*.png /usr/lib/python3/dist-packages/Ortho4XP/Utils
+Utils/*.jpg /usr/lib/python3/dist-packages/Ortho4XP/Utils
+Utils/*.scm /usr/lib/python3/dist-packages/Ortho4XP/Utils
