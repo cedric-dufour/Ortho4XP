@@ -3628,16 +3628,15 @@ def get_wmts_image(tilematrix,til_x,til_y,provider,http_session):
         url=url.replace('{y}',str(til_y)) 
         url=url.replace('{-y}',str(2**tilematrix-1-til_y))
         url=url.replace('{quadkey}',gtile_to_quadkey(til_x,til_y,tilematrix))
-        if '{switch:' in url:
-            (url_0,tmp)=url.split('{switch:')
-            (tmp,url_2)=tmp.split('}')
-            server_list=tmp.split(',')
-            url_1=random.choice(server_list).strip()
-            url=url_0+url_1+url_2 
     elif provider['request_type']=='wmts': #wmts
-        url=provider['url_prefix']+"&SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetTile&LAYER="+\
-            provider['layers']+"&STYLE=&FORMAT=image/"+provider['image_type']+"&TILEMATRIXSET="+provider['tilematrixset']['identifier']+\
-            "&TILEMATRIX="+provider['tilematrixset']['tilematrices'][tilematrix]['identifier']+"&TILEROW="+str(til_y)+"&TILECOL="+str(til_x)
+        if 'url_template' in provider:
+            url=provider['url_template'].replace('{zoom}',provider['tilematrixset']['tilematrices'][tilematrix]['identifier'])
+            url=url.replace('{x}',str(til_x))
+            url=url.replace('{y}',str(til_y))
+        else:
+            url=provider['url_prefix']+"&SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetTile&LAYER="+\
+                provider['layers']+"&STYLE=&FORMAT=image/"+provider['image_type']+"&TILEMATRIXSET="+provider['tilematrixset']['identifier']+\
+                "&TILEMATRIX="+provider['tilematrixset']['tilematrices'][tilematrix]['identifier']+"&TILEROW="+str(til_y)+"&TILECOL="+str(til_x)
     elif provider['request_type']=='local_tms':
         url_local=provider['url_template'].replace('{x}',str(til_x).zfill(4)) # ! Too much specific, needs to be changed by a x,y-> file_name lambda fct
         url_local=url_local.replace('{y}',str(-1*til_y).zfill(4))
@@ -3646,6 +3645,12 @@ def get_wmts_image(tilematrix,til_x,til_y,provider,http_session):
         else:
             if verbose_output>=1: print("!!!!!!! File ",url_local,"absent, using white texture instead !!!!!!!!!!")
             return(Image.new('RGB',(provider['tile_size'],provider['tile_size']),'white'))
+    if '{switch:' in url:
+        (url_0,tmp)=url.split('{switch:')
+        (tmp,url_2)=tmp.split('}')
+        server_list=tmp.split(',')
+        url_1=random.choice(server_list).strip()
+        url=url_0+url_1+url_2
     if 'fake_headers' in provider:
         fake_headers=provider['fake_headers']
     else:
